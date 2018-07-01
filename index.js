@@ -269,20 +269,31 @@ function createHtmlFileList(files, dir, useIcons, view) {
 
     path.push(encodeURIComponent(file.name));
 
-    var date = file.stat && file.name !== '..'
-      ? file.stat.mtime.toLocaleDateString() + ' ' + file.stat.mtime.toLocaleTimeString()
-      : '<b class="type-header">Type</b>';
-    var size = file.stat && !isDir
-      ? file.stat.size
-      : '<b class="size-header">Size</b>';
+    var EMPTY_SPACE = escapeHtml(' ');
+
+    var date = EMPTY_SPACE;
+    var size = EMPTY_SPACE;
+    
+    if (file.stat)  {
+       if (file.name === '..') {
+          date = '<b class="date-header">Date</b>' ;
+          size = '<b class="size-header">Size</b>' ;
+       } else {
+         date = escapeHtml(file.stat.mtime.toLocaleDateString() + ' ' + file.stat.mtime.toLocaleTimeString());
+         
+         if (!isDir) {
+           size = escapeHtml(file.stat.size);
+         }
+      }
+    }
 
     return '<li><a href="'
       + escapeHtml(normalizeSlashes(normalize(path.join('/'))))
       + '" class="' + escapeHtml(classes.join(' ')) + '"'
       + ' title="' + escapeHtml(file.name) + '">'
       + '<span class="name">' + escapeHtml(file.name) + '</span>'
-      + '<span class="size">' + escapeHtml(size) + '</span>'
-      + '<span class="date">' + escapeHtml(date) + '</span>'
+      + '<span class="size">' + size + '</span>'
+      + '<span class="date">' + date + '</span>'
       + '</a></li>';
   }).join('\n');
 
