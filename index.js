@@ -271,10 +271,10 @@ function createHtmlFileList(files, dir, useIcons, view) {
 
     var date = file.stat && file.name !== '..'
       ? file.stat.mtime.toLocaleDateString() + ' ' + file.stat.mtime.toLocaleTimeString()
-      : '';
+      : '<b class="type-header">Type</b>';
     var size = file.stat && !isDir
       ? file.stat.size
-      : '';
+      : '<b class="size-header">Size</b>';
 
     return '<li><a href="'
       + escapeHtml(normalizeSlashes(normalize(path.join('/'))))
